@@ -4,8 +4,8 @@ require("./model/config");
 const router = require("./routes/commonRoutes");
 const app = express();
 
-app.use(bodyParser.json)
-app.use(express.json) 
+app.use(bodyParser.json())
+app.use(express.json()) 
 app.use('/',router);
 
 
