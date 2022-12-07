@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userSchema = require("../model/userSchema");
+const { transporter } = require("../service/mailService");
 
 const userSignup = async (req , res)=>{
     let {email , password} = req.body;
@@ -24,14 +25,22 @@ const userSignup = async (req , res)=>{
         res.send("Error" + err.message)
     }
 }
+<<<<<<< HEAD
 const  secretKey = "Aman@1234$";
+=======
+const secretKey = "Aman@1234$"
+>>>>>>> send-reset-pass-email
 const userLogin = async (req , res) =>{
     let {email,password} = req.body;
     try{
         if(email && password){
             const user = await userSchema.findOne({email:email});
             if(user !=null){
+<<<<<<< HEAD
                 
+=======
+               
+>>>>>>> send-reset-pass-email
                 const isPassMatch = await bcrypt.compare(password,user.password);
                 if(user.email == email && isPassMatch){
                     const token = jwt.sign(
@@ -66,6 +75,46 @@ const userLogin = async (req , res) =>{
     }
 }
 
+const sendUserResetPasswordEmail = async (req,res) =>{
+    const {email} = req.body;
+    if(email){
+        const emailExists = await userSchema.findOne({email:email});
+        if(emailExists){
+            const secret = emailExists._id + secretKey;
+            //generate JWT
+            const token =  jwt.sign(
+                {userID : emailExists._id} , secret , {expiresIn:"30d"}
+                )
+            const link = `http://127.0.0.1:3000/api/user/reset/${emailExists._id}/${token}`;
+            console.log("Link: ",link);
+
+            //send email
+            console.log('email: ', emailExists.email);
+            let info =transporter.sendMail({
+                from: "amanguptaeducation@gmail.com",
+                to: emailExists.email,
+                subject: "password reset link",
+                html: ` <a href=${link}> Click here to reset password </a>`
+            })
+
+            res.status(200).json({
+                status : "Success",
+                Message : "please check your email ",info
+            })
+        }else{
+            res.status(404).json({
+                status : "Failed",
+                Message : "User Not Found..!"
+            })
+        }
+    }else{
+        res.status(204).json({
+            status : "Failed",
+            Message : "Email is required..!"
+        })
+    }
+}
+
 module.exports={
-    userSignup , userLogin,secretKey
+    userSignup , userLogin,sendUserResetPasswordEmail,secretKey
 }
