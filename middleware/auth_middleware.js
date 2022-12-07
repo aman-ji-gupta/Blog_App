@@ -9,8 +9,12 @@ const checkUserAuth = async (req , res , next) =>{
         try{
             //get token from header
             token = authorization.split(" ")[1];
+            console.log("Token: ",token);
+            console.log("Authorization :",authorization);
+
             //veryfy token
             const {userID} = jwt.verify(token,key.secretKey);
+            
             //get user from token
             req.userSchema = await userSchema.findById(userID).select('-password');
             next();

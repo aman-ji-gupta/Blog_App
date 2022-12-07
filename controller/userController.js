@@ -107,6 +107,49 @@ const sendUserResetPasswordEmail = async (req,res) =>{
     }
 }
 
+const userPasswordReset = async (req , res) =>{
+    const {password,confirm_pass} = req.body;
+    const{id,token}=req.params;
+    console.log(id);
+    console.log(token);
+    const user = await userSchema.findById(id);
+    const new_secret = user._id + secretKey;
+    console.log(new_secret);
+    try{
+        jwt.verify(token,new_secret);
+        if(password && confirm_pass){
+            if(password !=confirm_pass){
+                res.status(400).send({
+                    Status : "Failed",
+                    Message : "Password & confirm password should be same..!"
+                })
+            }else{
+                const salt = await bcrypt.genSalt(10);
+                const new_password = await bcrypt.hash(password,salt);
+                console.log("***" + user._id);
+                await userSchema.findByIdAndUpdate(user._id , {$set : {password : new_password}})
+            }
+            res.status(200).send({
+                Status : "Success",
+                Message : "Password Reset successfully..!..!"
+            })
+
+
+        }else{
+            res.status(204).json({
+                Status : "Failed",
+                Message : "All Fields are required..!"
+            })
+        }
+    }catch(err){
+        console.log(err);
+        res.json({
+            Status : "Failed",
+            Message : err.message
+        })
+    }
+}
+
 module.exports={
-    userSignup , userLogin,sendUserResetPasswordEmail,secretKey
+    userSignup , userLogin,sendUserResetPasswordEmail,secretKey,userPasswordReset
 }

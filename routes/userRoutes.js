@@ -9,5 +9,6 @@ const {upload} = require("../middleware/imageStorage")
 router.post('/register',upload.single("profilepic"),validation.registerUserValidation ,user.userSignup);
 router.post('/login',validation.loginUserValidation ,user.userLogin);
 router.post('/send-reset-password-email',authorization.checkUserAuth,user.sendUserResetPasswordEmail);
+router.post('/reset-password/:id/:token',user.userPasswordReset);
 
 module.exports=router;
