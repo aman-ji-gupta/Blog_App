@@ -10,5 +10,5 @@ app.use('/',router);
 
 
 app.listen(9000,()=>{
-    console.log("Sever started at port 9000");
+    console.log(`server is running at port: 9000`);
 })

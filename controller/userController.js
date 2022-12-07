@@ -24,14 +24,14 @@ const userSignup = async (req , res)=>{
         res.send("Error" + err.message)
     }
 }
-
+const  secretKey = "Aman@1234$";
 const userLogin = async (req , res) =>{
     let {email,password} = req.body;
     try{
         if(email && password){
             const user = await userSchema.findOne({email:email});
             if(user !=null){
-                const secretKey = "Aman@1234$"
+                
                 const isPassMatch = await bcrypt.compare(password,user.password);
                 if(user.email == email && isPassMatch){
                     const token = jwt.sign(
@@ -67,5 +67,5 @@ const userLogin = async (req , res) =>{
 }
 
 module.exports={
-    userSignup , userLogin
+    userSignup , userLogin,secretKey
 }
