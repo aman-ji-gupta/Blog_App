@@ -25,22 +25,14 @@ const userSignup = async (req , res)=>{
         res.send("Error" + err.message)
     }
 }
-<<<<<<< HEAD
-const  secretKey = "Aman@1234$";
-=======
 const secretKey = "Aman@1234$"
->>>>>>> send-reset-pass-email
 const userLogin = async (req , res) =>{
     let {email,password} = req.body;
     try{
         if(email && password){
             const user = await userSchema.findOne({email:email});
             if(user !=null){
-<<<<<<< HEAD
-                
-=======
                
->>>>>>> send-reset-pass-email
                 const isPassMatch = await bcrypt.compare(password,user.password);
                 if(user.email == email && isPassMatch){
                     const token = jwt.sign(
