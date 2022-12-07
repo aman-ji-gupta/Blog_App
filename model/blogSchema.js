@@ -20,7 +20,7 @@ const blogSchema = mongoose.Schema({
     },
     likes:{
         type:Number,
-        require:true
+        default :0
     },
     isActive:{
         type:Boolean,

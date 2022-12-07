@@ -134,7 +134,6 @@ const userPasswordReset = async (req , res) =>{
                 Message : "Password Reset successfully..!..!"
             })
 
-
         }else{
             res.status(204).json({
                 Status : "Failed",
