@@ -16,6 +16,8 @@ const userSignup = async (req , res)=>{
         }
         const salt = await bcrypt.genSalt(10);
         new_user.password = await bcrypt.hash(password,salt);
+        const filePath = `/uploads/${req.file.filename}`;
+        new_user.profilepic = filePath;
         const addUser = await new_user.save();
         res.json(addUser);
     }catch (err) {
