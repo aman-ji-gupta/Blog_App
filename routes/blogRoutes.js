@@ -6,5 +6,6 @@ const blog = require("../controller/blogController")
 const {upload} = require("../middleware/imageStorage");
 
 router.post('/addblog',upload.single("blog_pic"),validation.addBlogValidation,blog.addBlog);
+router.get('/find',blog.blogList);
 
 module.exports=router;
